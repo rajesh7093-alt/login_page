@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAINFRAME_DASHBOARD // SECURE_CORE_3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <script>
+        if (sessionStorage.getItem('authenticated') !== 'true') {
+            window.location.replace('index.html?error=unauthorized');
+        }
+    </script>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="crt-overlay"></div>
+    <div class="scanlines"></div>
+
+    <div class="dashboard-container" id="dash-container">
+        <header class="dash-header font-orbitron">
+            <div class="header-left">
+                <span class="pulse-indicator"></span> MAINFRAME_DASHBOARD // SECURE_NODE_9000
+            </div>
+            <div class="header-right font-share-tech">
+                <span class="user-badge text-success">ADMIN@CORE_3</span>
+                <span class="pipe">|</span>
+                <span id="dash-clock">00:00:00</span>
+                <span class="pipe">|</span>
+                <button id="logout-btn" class="cyber-btn secondary inline-btn">TERMINATE_SESSION</button>
+            </div>
+        </header>
+
+        <main class="dash-grid">
+            <!-- Left Panel: System Performance & Operations -->
+            <section class="dash-pane pane-system">
+                <div class="pane-header font-orbitron">
+                    <span class="icon">&#x2699;</span> SYSTEM_METRICS
+                </div>
+                <div class="pane-content font-share-tech">
+                    <div class="metric-group">
+                        <div class="metric-labels">
+                            <span>CPU_CORES_LOAD:</span> <span id="cpu-percent">24%</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar bar-green" id="cpu-bar" style="width: 24%"></div>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-labels">
+                            <span>VIRTUAL_MEM_LOAD:</span> <span id="ram-percent">48%</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar bar-cyan" id="ram-bar" style="width: 48%"></div>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-labels">
+                            <span>CORE_TEMPERATURE:</span> <span id="temp-label">42°C</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar bar-green" id="temp-bar" style="width: 42%"></div>
+                        </div>
+                    </div>
+
+                    <div class="operations-menu">
+                        <h4 class="text-cyan font-orbitron font-sm">QUICK_ACTIONS</h4>
+                        <button id="action-bypass" class="cyber-btn sm-btn">EXECUTE_IP_BYPASS</button>
+                        <button id="action-scan" class="cyber-btn secondary sm-btn">PORT_SCAN_SUBNET</button>
+                        <button id="action-inject" class="cyber-btn warning-btn sm-btn">INJECT_PAYLOAD</button>
+                    </div>
+
+                    <div class="system-alerts font-mono">
+                        <div class="alert-title font-orbitron text-danger">!! THREATS DETECTED !!</div>
+                        <div class="alerts-log" id="system-alerts-log">
+                            <div>[INFO] Threat shields active.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Center Panel: Sonar Network Map -->
+            <section class="dash-pane pane-map">
+                <div class="pane-header font-orbitron">
+                    <span class="icon">&#x1F310;</span> GEOGRAPHIC_NETWORK_RELAY
+                </div>
+                <div class="pane-content map-canvas-wrapper">
+                    <canvas id="network-map-canvas"></canvas>
+                    <div class="map-hud-overlay font-share-tech">
+                        <div>ACTIVE_RELAYS: <span class="text-success" id="active-relays-count">12</span></div>
+                        <div>LATENCY: <span class="text-cyan" id="latency-label">42ms</span></div>
+                        <div>SIGNAL: <span class="text-success">EXCELLENT</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Encrypted Database Browser -->
+            <section class="dash-pane pane-files">
+                <div class="pane-header font-orbitron">
+                    <span class="icon">&#x1F5C3;</span> ENCRYPTED_DATAPACKS
+                </div>
+                <div class="pane-content explorer-layout">
+                    <div class="file-list font-share-tech" id="file-list">
+                        <div class="file-item" data-file="nuclear_silos">
+                            <span class="file-icon">&#x1F512;</span> silo_access_codes.enc
+                        </div>
+                        <div class="file-item" data-file="firewall_script">
+                            <span class="file-icon">&#x1F512;</span> bypass_firewall.sh
+                        </div>
+                        <div class="file-item" data-file="user_credentials">
+                            <span class="file-icon">&#x1F512;</span> comp_passwords.db
+                        </div>
+                        <div class="file-item" data-file="project_logs">
+                            <span class="file-icon">&#x1F512;</span> project_blackout.log
+                        </div>
+                    </div>
+
+                    <div class="file-viewer font-mono">
+                        <div class="viewer-header font-share-tech text-cyan" id="viewer-filename">
+                            SELECT DATAPACK TO DECRYPT...
+                        </div>
+                        <div class="viewer-body" id="viewer-content">
+                            <div class="placeholder-text font-share-tech">
+                                Awaiting file decryption handshakes. Select a pack from the grid above to initialize.
+                            </div>
+                        </div>
+                        <div class="viewer-actions hide" id="viewer-actions">
+                            <div class="decryption-progress-bar-container">
+                                <div class="decryption-progress-bar" id="decrypt-progress"></div>
+                            </div>
+                            <button id="decrypt-btn" class="cyber-btn secondary sm-btn font-orbitron">RUN_DECRYPTOR</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="dash-footer font-share-tech">
+            <div class="footer-item">
+                <span>SECURITY_LEVEL:</span> <span class="text-danger glow-text">MIL-SPEC // CLASS 4</span>
+            </div>
+            <div class="footer-item">
+                <span>IP_ROUTING:</span> <span class="text-info" id="routing-ip">192.168.1.1</span>
+            </div>
+            <div class="footer-item">
+                <span>CONNECTION:</span> <span class="text-success blink-fast">SECURE</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Alert Modal overlay -->
+    <div class="alert-modal hide" id="alert-modal">
+        <div class="modal-box font-orbitron">
+            <h2 id="modal-title" class="text-cyan">MODAL_TITLE</h2>
+            <p id="modal-desc" class="font-share-tech">MODAL_DESCRIPTION</p>
+            <div class="decryption-animation hide" id="modal-decryption-loader">
+                <div class="decryption-dots font-share-tech">DECRYPTING PACKETS...</div>
+            </div>
+            <button id="modal-close" class="cyber-btn sm-btn">DISMISS</button>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
