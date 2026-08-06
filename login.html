@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+overflow:hidden;
+background:#000;
+font-family:'Orbitron',sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-3;
+}
+
+#particles{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-2;
+pointer-events:none;
+}
+
+.login{
+
+width:380px;
+padding:40px;
+background:rgba(0,0,0,.45);
+backdrop-filter:blur(12px);
+border:1px solid rgba(0,255,150,.4);
+box-shadow:
+0 0 20px #00ff99,
+0 0 50px rgba(0,255,100,.3);
+
+border-radius:20px;
+animation:popup 1s ease;
+}
+
+@keyframes popup{
+from{
+transform:scale(.6);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.logo{
+
+font-size:28px;
+text-align:center;
+color:#00ff88;
+margin-bottom:10px;
+text-shadow:0 0 20px #00ff88;
+}
+
+.terminal{
+
+font-family:'Share Tech Mono',monospace;
+color:#0f0;
+font-size:14px;
+height:20px;
+margin-bottom:30px;
+text-align:center;
+}
+
+.group{
+position:relative;
+margin-bottom:28px;
+}
+
+input{
+
+width:100%;
+padding:15px;
+background:transparent;
+outline:none;
+border:none;
+color:white;
+font-size:16px;
+border-bottom:2px solid #00ff88;
+transition:.4s;
+}
+
+label{
+position:absolute;
+left:0;
+top:15px;
+pointer-events:none;
+transition:.4s;
+color:#777;
+}
+
+input:focus + label,
+input:valid + label{
+
+top:-10px;
+font-size:12px;
+color:#00ff88;
+}
+
+input:focus{
+box-shadow:0 5px 15px rgba(0,255,150,.3);
+}
+
+.eye{
+
+position:absolute;
+right:10px;
+top:15px;
+cursor:pointer;
+font-size:18px;
+}
+
+.strength{
+
+height:6px;
+width:100%;
+background:#222;
+margin-top:8px;
+border-radius:20px;
+overflow:hidden;
+}
+
+.bar{
+
+height:100%;
+width:0%;
+background:red;
+transition:.4s;
+}
+
+button{
+
+width:100%;
+padding:15px;
+border:none;
+cursor:pointer;
+font-size:16px;
+background:#00ff88;
+color:black;
+font-weight:bold;
+border-radius:50px;
+transition:.4s;
+box-shadow:0 0 15px #00ff88;
+}
+
+button:hover{
+
+transform:scale(1.05);
+box-shadow:
+0 0 20px #00ff88,
+0 0 60px #00ff88;
+}
+
+.scan{
+
+position:absolute;
+width:100%;
+height:2px;
+background:#00ff88;
+left:0;
+top:0;
+animation:scan 3s linear infinite;
+opacity:.4;
+}
+
+@keyframes scan{
+
+0%{top:0;}
+100%{top:100%;}
+}
+
+.footer{
+
+text-align:center;
+margin-top:20px;
+font-size:12px;
+color:#888;
+}
+
+.glow{
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+
+from{
+text-shadow:0 0 10px #00ff88;
+}
+
+to{
+text-shadow:
+0 0 20px #00ff88,
+0 0 40px #00ff88,
+0 0 60px #00ff88;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<canvas id="particles"></canvas>
+
+<div class="login">
+
+<div class="scan"></div>
+
+<div class="logo glow">
+SYSTEM ACCESS
+</div>
+
+<div class="terminal" id="typing"></div>
+
+<div class="group">
+
+<input type="text" required>
+
+<label>Username</label>
+
+</div>
+
+<div class="group">
+
+<input type="password" id="pass" required>
+
+<label>Password</label>
+
+<span class="eye" onclick="toggle()">👁</span>
+
+<div class="strength">
+
+<div class="bar" id="bar"></div>
+
+</div>
+
+</div>
+
+<button onclick="login()">
+LOGIN
+</button>
+
+<div class="footer">
+
+Encrypted Authentication v5.0
+
+</div>
+
+</div>
+
+<script>
+
+const text="> Initializing Secure Terminal...";
+let i=0;
+
+function type(){
+
+if(i<text.length){
+
+document.getElementById("typing").innerHTML+=text.charAt(i);
+
+i++;
+
+setTimeout(type,60);
+
+}
+
+}
+
+type();
+
+function toggle(){
+
+let p=document.getElementById("pass");
+
+p.type=p.type==="password"?"text":"password";
+
+}
+
+document.getElementById("pass").addEventListener("input",function(){
+
+let v=this.value.length;
+
+let bar=document.getElementById("bar");
+
+if(v<4){
+
+bar.style.width="25%";
+
+bar.style.background="red";
+
+}
+
+else if(v<7){
+
+bar.style.width="60%";
+
+bar.style.background="orange";
+
+}
+
+else{
+
+bar.style.width="100%";
+
+bar.style.background="#00ff88";
+
+}
+
+});
+
+function login(){
+
+let btn=document.querySelector("button");
+
+btn.innerHTML="AUTHENTICATING...";
+
+btn.style.background="#0ff";
+
+setTimeout(()=>{
+
+btn.innerHTML="ACCESS GRANTED";
+
+btn.style.background="#00ff88";
+
+},2000);
+
+}
+
+const canvas=document.getElementById("matrix");
+
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+
+canvas.height=window.innerHeight;
+
+const letters="01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%^&*";
+
+const font=16;
+
+const columns=canvas.width/font;
+
+const drops=[];
+
+for(let x=0;x<columns;x++)
+drops[x]=1;
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,.05)";
+
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ff00";
+
+ctx.font=font+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+const txt=letters[Math.floor(Math.random()*letters.length)];
+
+ctx.fillText(txt,i*font,drops[i]*font);
+
+if(drops[i]*font>canvas.height&&Math.random()>0.975)
+
+drops[i]=0;
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(draw,35);
+
+const pc=document.getElementById("particles");
+
+const pctx=pc.getContext("2d");
+
+pc.width=window.innerWidth;
+
+pc.height=window.innerHeight;
+
+let particles=[];
+
+for(let i=0;i<120;i++){
+
+particles.push({
+
+x:Math.random()*pc.width,
+
+y:Math.random()*pc.height,
+
+r:Math.random()*2,
+
+dx:(Math.random()-.5),
+
+dy:(Math.random()-.5)
+
+});
+
+}
+
+function animate(){
+
+pctx.clearRect(0,0,pc.width,pc.height);
+
+pctx.fillStyle="#00ff88";
+
+particles.forEach(p=>{
+
+pctx.beginPath();
+
+pctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+
+pctx.fill();
+
+p.x+=p.dx;
+
+p.y+=p.dy;
+
+if(p.x<0)p.x=pc.width;
+
+if(p.x>pc.width)p.x=0;
+
+if(p.y<0)p.y=pc.height;
+
+if(p.y>pc.height)p.y=0;
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
